@@ -11,15 +11,14 @@ class Character(object):
 	intelligence = 7
 	willpower = 7
 	presence = 7
-	
 	_attributes = ['name','attributePoints', 'strength', 'constitution', 'coordination', 'adaptation', 'perception', 'intelligence', 'willpower', 'presence']
 	def __init__(self,name):
 		assert self.valid_name(name)
 		self.name = name
 	def add_points(self):
-		accepted = ['strength', 'constitution', 'adaptation', 'perception', 'intelligence', 'willpower', 'presence']
+		accepted = ['strength', 'constitution', 'coordination', 'adaptation', 'perception', 'intelligence', 'willpower', 'presence']
 		accepted_dict = dict(enumerate(accepted, start=1))
-		prompt = "\nWhich attribute?\n\t" + "\n\t".join("%d. %s"%n for n in accepted_dict_items())+"\n?"
+		prompt = "\nWhich attribute\n\t" + "\n\t".join("%d. %s"%n for n in accepted_dict.items())+"\n? "
 		attribute = False
 		while attribute not in accepted:
 			attribute = raw_input(prompt)
@@ -30,39 +29,27 @@ class Character(object):
 		amount = None
 		'''Depending on the number, this variable needs to subtract more or less frim the attributePoints total.
 				Target Number:	Attribute Point Cost
-				There could be an easier way to do this.'''
+				UPDATE:  Got the attributePoints total to adjust accordingly.  However, I cannot get the
+				attribute themselves to change correctly... yet.
+'''
 		while type(amount) != int or self.attributePoints == 0:
-			amount = int(raw_input("Raise to what number?"))
+			amount = int(raw_input("Raise to what number? "))
 			if amount == 7:
-				attributePoints -= 0
-			elif amount == 8:
-				attributePoints -= 1
-			elif amount == 9:
-				attributePoints -= 2
-			elif amount == 10:
-				attributePoints -= 3
-			elif amount == 11:
-				attributePoints -= 4
-			elif amount == 12:
-				attributePoints -= 5
-			elif amount == 13:
-				attributePoints -= 6
-			elif amount == 14:
-				attributePoints -= 7
-			elif amount == 15:
-				attributePoints -= 8
+				self.attributePoints -= 0
+			elif amount >= 8 and amount < 16:			
+				self.attributePoints -= amount -7
 			elif amount == 16:
-				attributePoints -= 10
+				self.attributePoints -= 10
 			elif amount == 17:
-				attributePoints -= 12
+				self.attributePoints -= 12
 			elif amount == 18:
-				attributePoints -= 14
+				self.attributePoints -= 14
 			elif amount == 19:
-				attributePoints -= 17
+				self.attributePoints -= 17
 			elif amount == 20:
-				attributePoints -= 20
+				self.attributePoints -= 20
 			elif amount > 20:
-				print "You must enter a number between 7 and 20"
+				print "You must enter a number between 7 and 20. "
 		self.__setattr__(attribute, self.__getattribute__(attribute) == amount)
 	def __str__(self):
 		return "\n".join("%s\t:\t%s"%(n, self.__getattribute__(n)) for n in self._attributes)
@@ -75,7 +62,7 @@ class Character(object):
 if __name__ == "__main__":
 	running = True
 	print "Create a character!  You have 38 (or more) points to assign to various attributes."
-	name = ' '
+	name = ''
 	while not Character.valid_name(name):
 		name = raw_input("Please enter your character's name:")
 	CHAR = Character(name)
@@ -91,8 +78,7 @@ if __name__ == "__main__":
 		if CHOICE in OPTIONS_DICT.keys():
 			CHOICE = OPTIONS_DICT[CHOICE]
 		if CHOICE == "Set Stats":
-			print "Got too tired to finish this portion" 
-			'''got too tired here to figure out the code on how to get up to the Class'''
+			CHAR.add_points()
 		elif CHOICE == "See current attributes":
 			print CHAR
 		elif CHOICE == "Exit":
@@ -187,10 +173,3 @@ elif constitution > 20:
 elif constitution > 22:
 	naturalResistance = -5
 '''
-
-
-
-	
-
-
-
