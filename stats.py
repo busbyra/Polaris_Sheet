@@ -18,21 +18,23 @@ class Character(object):
 	def add_points(self):
 		accepted = ['strength', 'constitution', 'coordination', 'adaptation', 'perception', 'intelligence', 'willpower', 'presence']
 		accepted_dict = dict(enumerate(accepted, start=1))
-		prompt = "\nWhich attribute\n\t" + "\n\t".join("%d. %s"%n for n in accepted_dict.items())+"\n? "
+		prompt = "\nAvailable Attributes:\n\n\t" + "\n\t".join("%d. %s"%n for n in accepted_dict.items())+"\n\n Make a selection: "
 		attribute = False
 		while attribute not in accepted:
 			attribute = raw_input(prompt)
 			try:
 				attribute = accepted_dict[int(attribute)]
 			except:
-				print "Input was invalid.  Please enter either an attribute or its corresponding number"
+				print "Input was invalid.  Please enter either an attribute or its corresponding number. "
 		amount = None
-		'''Depending on the number, this variable needs to subtract more or less frim the attributePoints total.
+		'''Below: Depending on the number, this variable needs to subtract more or less from the attributePoints total.
 				Target Number:	Attribute Point Cost
 				UPDATE:  Got the attributePoints total to adjust accordingly.  However, I cannot get the
-				attribute themselves to change correctly... yet.
+				attribute themselves to change correctly.  I can get the attribute to adjust if I turn == into +, but it
+				adjusts by the amount instead of turning the new value into the value given.
+			Additionally, I'll adjust other needed things like lowering stats and whatnot once I get this piece working.	
 '''
-		while type(amount) != int or self.attributePoints == 0:
+		while type(amount) != int and self.attributePoints > 0:
 			amount = int(raw_input("Raise to what number? "))
 			if amount == 7:
 				self.attributePoints -= 0
@@ -50,7 +52,7 @@ class Character(object):
 				self.attributePoints -= 20
 			elif amount > 20:
 				print "You must enter a number between 7 and 20. "
-		self.__setattr__(attribute, self.__getattribute__(attribute) == amount)
+		self.__setattr__(attribute, self.__getattribute__(attribute) == amount) #This is my problem area
 	def __str__(self):
 		return "\n".join("%s\t:\t%s"%(n, self.__getattribute__(n)) for n in self._attributes)
 	@staticmethod
@@ -64,7 +66,7 @@ if __name__ == "__main__":
 	print "Create a character!  You have 38 (or more) points to assign to various attributes."
 	name = ''
 	while not Character.valid_name(name):
-		name = raw_input("Please enter your character's name:")
+		name = raw_input("Please enter your character's name: ")
 	CHAR = Character(name)
 	OPTIONS_LIST =["Set Stats", "See current attributes", "Exit"]
 	OPTIONS_DICT = dict(enumerate(OPTIONS_LIST, start=1))
