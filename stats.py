@@ -52,7 +52,7 @@ class Character(object):
 				self.attributePoints -= 20
 			elif amount > 20:
 				print "You must enter a number between 7 and 20. "
-		self.__setattr__(attribute, self.__getattribute__(attribute) == amount) #This is my problem area
+		self.__setattr__(attribute, self.__getattribute__(attribute) + amount - 7) #This is my problem area
 	def __str__(self):
 		return "\n".join("%s\t:\t%s"%(n, self.__getattribute__(n)) for n in self._attributes)
 	@staticmethod
